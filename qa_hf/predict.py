@@ -174,9 +174,12 @@ def load_model(opt):
 
 
 def forward(opt, m, tok_idx, att_mask, type_idx):
-	# use type_idx only when using pre-trained bert-large
+	# use type_idx only in bert models
 	#	Other models either do not accept type_idx, or we trained them without it (which turns out doesn't matter much to test F1)
-	output = m(tok_idx, att_mask, type_idx)
+	if 'bert' in opt.transformer_type and 'distilbert' not in opt.transformer_type:
+		output = m(tok_idx, att_mask, type_idx)
+	else:
+		output = m(tok_idx, att_mask)
 	start_scores, end_scores = output.start_logits, output.end_logits
 	return torch.nn.functional.softmax(start_scores, dim=-1), torch.nn.functional.softmax(end_scores, dim=-1)
 
