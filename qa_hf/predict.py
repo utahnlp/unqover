@@ -176,7 +176,7 @@ def load_model(opt):
 def forward(opt, m, tok_idx, att_mask, type_idx):
 	# use type_idx only in bert models
 	#	Other models either do not accept type_idx, or we trained them without it (which turns out doesn't matter much to test F1)
-	if 'bert' in opt.transformer_type and 'distilbert' not in opt.transformer_type:
+	if 'bert' in opt.hf_model and 'distilbert' not in opt.hf_model:
 		output = m(tok_idx, att_mask, type_idx)
 	else:
 		output = m(tok_idx, att_mask)
